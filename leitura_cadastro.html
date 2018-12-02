@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>O Senhor dos Celulares - Cadastro</title>
+  </head>
+  <body>   
+    <div class="jumbotron">
+      <img src="imgs/header1.png" class="img-fluid" alt="Responsive image">
+      <div class="container container-fluid">
+      <h1 class="display-4">Cadastro de Clientes!</h1>
+    
+  </div>
+
+  <hr class="my-4">
+  <p>Visualize os cadastros!</p>
+  <p class="lead">
+  </p>
+
+
+
+<div id="leitura_cadastro">
+  <table id="cadastrados" class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">nome</th>
+      <th scope="col">aparelho</th>
+      <th scope="col">cep</th>
+      <th scope="col">data</th>
+      <th scope="col">descricao</th>
+      <th scope="col">email</th>
+      <th scope="col">endereco</th>
+      <th scope="col">marca</th>
+      <th scope="col">ordem</th>
+      <th scope="col">pagamento</th>
+      <th scope="col">deletar</th>
+    </tr>
+  </thead>
+  <tbody id="corpo_tabela">
+    
+  </tbody>
+  </table>
+  <a href="cadastro.html">Inserir novo cadastro</a>
+</div>
+
+</div>
+
+
+
+
+
+  <!-- Footer -->
+  <footer class="page-footer font-small blue">
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2018 Copyright:
+      <a href="https://www.facebook.com/daniel.martins.9279807"> Daniel Martins Developer</a>
+    </div>
+    <!-- Copyright -->
+
+  </footer>
+  <!-- Footer -->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!--script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script-->
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+  <script type="text/javascript">
+  var settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "https://senhor-dos-celulares.firebaseio.com/contatos.json",
+    "method": "GET",
+    "headers": {}
+  }
+  
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});  $.ajax(settings).done(function (response) {
+
+    console.log(response);
+
+    var tbl=$("<table/>").attr("id","mytable").attr("class", "table");
+    $("#leitura_cadastro").append(tbl);
+
+    Object.keys(response).forEach(function(key) {
+      console.log(key, response[key]);
+
+      lista = ["nome",
+        "aparelho",
+        "cep",
+        "data",
+        "descricao",
+        "email",
+        "endereco",
+        "marca",
+        "ordem",
+        "pagamento"]
+        new_td = ""
+        for(var lista_index=0;lista_index<lista.length;lista_index++){
+          new_td += "<td>"+response[key][lista[lista_index]]+"</td>"
+        }
+        //deletar
+        new_td += '<td><a onclick="delete_value(\'' + key + '\')" href="#">Delete</a></td>'
+
+
+     $("#corpo_tabela").append('<tr class="'+key+'">'+new_td+"</tr>"); 
+    
+    });
+  });
+  function delete_value(key){
+      var settings_delete = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://senhor-dos-celulares.firebaseio.com/contatos/"+key+".json",
+        "method": "DELETE",
+        "headers": {}
+      }
+
+
+    var txt;
+    var r = confirm("Você tem certeza que quer deletar?");
+    if (r == true) {
+          $.ajax(settings_delete).done(function (response) {
+            console.log("deletado:", response);
+            alert("deletado!")
+            $('#corpo_tabela .'+key).remove()
+          });
+    } else {
+        return
+    }
+
+  }
+
+  </script>
+  </body>
+
+
+
+</html>
